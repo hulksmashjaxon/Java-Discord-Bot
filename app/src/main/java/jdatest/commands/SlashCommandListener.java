@@ -1,11 +1,6 @@
 package jdatest.commands;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.HttpURLConnection;
 import java.net.URI;
-import java.net.URL;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -82,14 +77,12 @@ public class SlashCommandListener extends ListenerAdapter {
                 if (index != null) {
                   String lat = index.get("lat").asText();
                   String lon = index.get("lon").asText();
-                  HttpClient weatherClient = HttpClient.newHttpClient();
                   HttpRequest weatherRequest = HttpRequest.newBuilder().uri(URI.create(
                     String.format("https://api.openweathermap.org/data/2.5/weather?lat=%s&lon=%s&appid=%s&units=imperial", lat, lon, dotenv.get("OPENWEATHER_API_KEY"))))
                   .GET().build();
 
                   HttpResponse<String> weatherRes = client.send(weatherRequest, HttpResponse.BodyHandlers.ofString());
                   try {
-                    ObjectMapper weatherMapper = new ObjectMapper();
                     JsonNode weatherRoot = mapper.readTree(weatherRes.body());
                     JsonNode weatherIndex = weatherRoot; //* i did this wrong and im just going to do this. lmfao */
                     if (weatherIndex != null) {
@@ -110,18 +103,22 @@ public class SlashCommandListener extends ListenerAdapter {
                         + desc, true)).addField(new Field("General", String.format("**Temperature:** %s°F\n**Min:** %s°F\n**Max:** %s°F\n**Humidity:** %s%%", temperature, min, max, humidity), false))
                         .build();
 
+                        client.close();
                         event.replyEmbeds(embed).queue();
                       }
                     }
                     
                   } catch (Exception e) {
+                    client.close();
                     e.printStackTrace();
                   }
                 }
               } catch (Exception e) {
+                client.close();
                 e.printStackTrace();
               }
             } catch (Exception e) {
+              client.close();
               e.printStackTrace();
             }
           }
