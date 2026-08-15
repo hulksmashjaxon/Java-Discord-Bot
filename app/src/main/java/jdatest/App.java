@@ -3,10 +3,11 @@ package jdatest;
 import java.util.EnumSet;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import jdatest.commands.AutocompleteListener;
 import jdatest.commands.CommandList;
 import jdatest.commands.SlashCommandListener;
-import jdatest.utils.SL4J;
-import jdatest.utils.SL4J.logModes;
+import jdatest.utils.SLF4J;
+import jdatest.utils.SLF4J.logModes;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.requests.GatewayIntent;
@@ -18,7 +19,7 @@ public class App {
     Dotenv dotenv = Dotenv.load();
     if (dotenv.get("TOKEN").equals(null)) throw new NullPointerException("Could not find token in .env");
     JDA jda = JDABuilder.createLight(dotenv.get("TOKEN"), EnumSet.of(GatewayIntent.GUILD_MESSAGES, GatewayIntent.MESSAGE_CONTENT, GatewayIntent.GUILD_MEMBERS))
-    .addEventListeners(new SlashCommandListener())
+    .addEventListeners(new SlashCommandListener(), new AutocompleteListener())
     .build();
 
     try {
@@ -30,6 +31,7 @@ public class App {
     CommandListUpdateAction commands = jda.updateCommands();
     commands.addCommands(CommandList.GetCommands());
     commands.queue();
-    SL4J.Log("Completed command setup", logModes.INFO, App.class);
+    SLF4J.Log("Completed command setup", logModes.INFO);
+    SLF4J.Log("Completed autocomplete setup", logModes.INFO);
   }
 }

@@ -26,6 +26,8 @@ dependencies {
     implementation("net.dv8tion:JDA:5.3.0")
     implementation("io.github.cdimascio:dotenv-java:3.2.0")
     implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.1")
+    implementation("jakarta.annotation:jakarta.annotation-api:3.0.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments.

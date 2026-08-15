@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <command>
+    <name>util</name>
+    <description>Various utility commands</description>
+    <subcommands>
+      <subcommand>
+        <name>get-avatar</name>
+        <description>Gets a user's avatar</description>
+        <options>
+          <option>
+            <type>USER</type>
+            <name>user</name>
+            <description>The user</description>
+            <required>true</required>
+          </option>
+        </options>
+      </subcommand>
+      <subcommand>
+        <name>get-weather</name>
+        <description>Get weather from a city in any US state</description>
+        <options>
+          <option>
+            <type>STRING</type>
+            <name>state</name>
+            <description>The state</description>
+            <required>true</required>
+            <autocomplete>true</autocomplete>
+          </option>
+          <option>
+            <type>STRING</type>
+            <name>city</name>
+            <description>The city/town in the state (note that there is NO autocomplete in this)</description>
+            <required>true</required>
+          </option>
+        </options>
+      </subcommand>
+    </subcommands>
+  </command>
+  <command>
+    <name>ping</name>
+    <description>Returns the gateway and bot ping</description>
+  </command>
+</commands>

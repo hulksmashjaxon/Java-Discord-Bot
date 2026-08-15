@@ -3,11 +3,12 @@ package jdatest.utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SL4J {
+public class SLF4J {
   public enum logModes {
     INFO("INFO"),
     WARN("WARN"),
-    ERROR("ERROR");
+    ERROR("ERROR"),
+    DEBUG("DEBUG");
 
     private final String val;
 
@@ -20,19 +21,22 @@ public class SL4J {
     }
     
   }
-  public static void Log(String text, logModes modes ,Class<?> clazz) {
-    final Logger logger = LoggerFactory.getLogger(clazz);
+  public static void Log(Object text, logModes modes) {
+    Class<?> clazz = StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE).getCallerClass();
+    final Logger logger = LoggerFactory.getLogger(clazz); 
     switch (modes.getValue()) {
       case "INFO":
-        logger.info(text);
+        logger.info(text.toString());
         break;
       case "ERROR":
-        logger.error(text);
+        logger.error(text.toString());
         break;
       case "WARN":
-        logger.warn(text);
+        logger.warn(text.toString());
         break;
-
+      case "DEBUG":
+        logger.debug(text.toString());
+        break;
       default:
         break;
     }
