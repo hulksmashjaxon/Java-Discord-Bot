@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nonnull;
-
 import jdatest.utils.SLF4J;
 import jdatest.utils.SLF4J.logModes;
 import net.dv8tion.jda.api.events.interaction.command.CommandAutoCompleteInteractionEvent;
@@ -34,7 +32,7 @@ public class AutocompleteListener extends ListenerAdapter {
 
     @SuppressWarnings("null")
     @Override
-    public void onCommandAutoCompleteInteraction(@Nonnull CommandAutoCompleteInteractionEvent event) {
+    public void onCommandAutoCompleteInteraction(CommandAutoCompleteInteractionEvent event) {
       final String evtName = event.getFocusedOption().getName();
       switch (evtName) {
         case "state":
