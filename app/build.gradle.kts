@@ -28,6 +28,7 @@ dependencies {
     implementation("ch.qos.logback:logback-classic:1.5.6")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.22.1")
     implementation("jakarta.annotation:jakarta.annotation-api:3.0.0")
+    implementation("org.mongodb:mongodb-driver-sync:5.6.0")
 }
 
 // Apply a specific Java toolchain to ease working on different environments
