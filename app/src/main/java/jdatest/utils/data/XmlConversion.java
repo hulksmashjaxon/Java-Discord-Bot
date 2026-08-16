@@ -11,6 +11,7 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
 import net.dv8tion.jda.api.interactions.commands.build.SubcommandData;
+import net.dv8tion.jda.api.interactions.commands.build.SubcommandGroupData;
 
 public class XmlConversion {
   public static List<CommandData> xmlConversion(ListWrap parsed) {
@@ -32,7 +33,39 @@ public class XmlConversion {
         slashCommand.setContexts(InteractionContextType.GUILD);
       }
 
-      if (xmlCmd.getSubcommands() != null) {
+      if (xmlCmd.getSubcommandGroups() != null && xmlCmd.getSubcommands() == null) {
+        for (XmlSubcommandGroupData subGroup : xmlCmd.getSubcommandGroups()) {
+          String subName = subGroup.getName();
+          String subDesc = subGroup.getDescription();
+          if (subName == null || subDesc == null) {
+            return commands;
+          }
+          SubcommandGroupData jdaSubGroup = new SubcommandGroupData(subName, description);
+          if (subGroup.getSubcommands() != null) {
+            for (XmlSubcommandData subcommand : subGroup.getSubcommands()) {
+              String sbName = subcommand.getName();
+              String sbDesc = subcommand.getDescription();
+              if (sbName == null || sbDesc == null) { return commands; }
+              SubcommandData jdaSubcommand = new SubcommandData(sbName, sbDesc);
+              if (subcommand.getOptions() != null) {
+                for (XmlOptionData opt : subcommand.getOptions()) {
+                  String optName = opt.getName();
+                  String optDesc = opt.getDescription();
+                  OptionType optType = OptionType.valueOf(opt.getType());
+                  if (optName == null || optDesc == null) {
+                    return commands;
+                  }
+                  jdaSubcommand.addOption(optType, optName, optDesc);
+                }
+              }
+              jdaSubGroup.addSubcommands(jdaSubcommand);
+            }
+          }
+          slashCommand.addSubcommandGroups(jdaSubGroup);
+        }
+      } 
+
+      if (xmlCmd.getSubcommands() != null && xmlCmd.getSubcommandGroups() == null) {
         for (XmlSubcommandData subcommand : xmlCmd.getSubcommands()) {
           String scName = subcommand.getName();
           String scDesc = subcommand.getDescription();

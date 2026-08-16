@@ -13,6 +13,15 @@ public class XmlCommandData {
   @JacksonXmlProperty() private String context;
   @JacksonXmlProperty(localName = "subcommand") @JacksonXmlElementWrapper(localName = "subcommands") private List<XmlSubcommandData> subcommands;
   @JacksonXmlProperty(localName = "options") @JacksonXmlElementWrapper(localName = "options") private List<XmlOptionData> options;
+  @JacksonXmlProperty(localName = "subcommandGroup") @JacksonXmlElementWrapper(localName = "subcommandGroups") private List<XmlSubcommandGroupData> subcommandGroups;
+
+  public List<XmlSubcommandGroupData> getSubcommandGroups() {
+    return subcommandGroups;
+  }
+
+  public void setSubcommandGroups(List<XmlSubcommandGroupData> subcommandGroups) {
+    this.subcommandGroups = subcommandGroups;
+  }
 
   public List<XmlOptionData> getOptions() {
     return options;

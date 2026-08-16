@@ -42,4 +42,20 @@
     <name>ping</name>
     <description>Returns the gateway and bot ping</description>
   </command>
+  <command>
+    <name>moderation</name>
+    <description>moderation related commands</description>
+    <subcommandGroups>
+      <subcommandGroup>
+        <name>ban</name>
+        <description>For banning/unbanning ppl</description>
+        <subcommands>
+          <subcommand>
+            <name>issue</name>
+            <description>issue a ban</description>
+          </subcommand>
+        </subcommands>
+      </subcommandGroup>
+    </subcommandGroups>
+  </command>
 </commands>
