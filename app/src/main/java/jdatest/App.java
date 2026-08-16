@@ -6,6 +6,7 @@ import io.github.cdimascio.dotenv.Dotenv;
 import jdatest.commands.AutocompleteListener;
 import jdatest.commands.CommandList;
 import jdatest.commands.SlashCommandListener;
+import jdatest.utils.MongoDb;
 import jdatest.utils.SLF4J;
 import jdatest.utils.SLF4J.logModes;
 import net.dv8tion.jda.api.JDA;
@@ -31,7 +32,7 @@ public class App {
     CommandListUpdateAction commands = jda.updateCommands();
     commands.addCommands(CommandList.GetCommands());
     commands.queue();
-    SLF4J.Log("Completed command setup", logModes.INFO);
-    SLF4J.Log("Completed autocomplete setup", logModes.INFO);
+    SLF4J.Log("Completed listener setup, starting JDA", logModes.INFO);
+    MongoDb.get();
   }
 }
