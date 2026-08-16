@@ -4,13 +4,23 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.HashMap;
 import java.util.Map;
+
+import org.bson.Document;
+import org.bson.conversions.Bson;
+import static com.mongodb.client.model.Filters.*; 
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 
 import io.github.cdimascio.dotenv.Dotenv;
+import jdatest.utils.MongoDb;
 import jdatest.utils.SLF4J;
 import jdatest.utils.SLF4J.logModes;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -25,6 +35,7 @@ import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 
 public class SlashCommandListener extends ListenerAdapter {
   Dotenv dotenv = Dotenv.load();
+  MongoClient dbClient = MongoDb.get();
   @SuppressWarnings("null")
   @Override
   public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
@@ -120,6 +131,27 @@ public class SlashCommandListener extends ListenerAdapter {
             } catch (Exception e) {
               client.close();
               e.printStackTrace();
+            }
+          }
+        }
+      }
+      case "moderation" -> {
+        switch (event.getSubcommandGroup()) {
+          case "ban" -> {
+            switch (event.getSubcommandName()) {
+              case "issue" -> {
+                MongoCollection<Document> users = dbClient.getDatabase("users").getCollection("users");
+                Bson filter = eq(event.getUser().getId());
+                FindIterable<Document> user = users.find(filter);
+                if (user == null) {
+                  Map<String, Object> punishmentsKV = new HashMap<>();
+                  punishmentsKV.put("warnings", new HashMap<>());
+                  punishmentsKV.put("bans", new HashMap<>());
+                  punishmentsKV.put("mutes", new HashMap<>());
+                  punishmentsKV.put("note", new String());
+                  Document userDoc = new Document().append("id", event.getUser().getId()).append("punishments", punishmentsKV);
+                }
+              }
             }
           }
         }
